@@ -1,0 +1,2556 @@
+openapi: 3.0.3
+info:
+  title: Yousign API v3
+  description: >-
+    ## 👋 Introduction
+
+
+    The Yousign API is designed to provide a collaborative environment for
+    developers to thoroughly discover it.
+
+
+    This collection can help you perform various tests for your APIs, i.e in
+    Sandbox or Production env.
+
+
+    ## 🚀 Getting started with this collection
+
+
+    You can send individual requests in this collection and take advantage of
+    auto-set variables value when executing your requests, so you can forget
+    about IDs from one request to another.
+
+
+    Don't hesitate to use dedicated environment as well (Sandbox / Production).
+
+
+    ## 🛟 Help and support
+
+
+    If you have any questions or suggestions, please don't hesitate to check
+    [the documentation](https://developers.yousign.com/docs/introduction-new).
+  version: 1.0.0
+  contact: {}
+servers:
+  - url: https://api-sandbox.yousign.app/v3
+paths:
+  /signature_requests:
+    get:
+      tags:
+        - Signature Requests
+      summary: List Signature Requests
+      description: List Signature Requests
+      operationId: listSignatureRequests
+      parameters:
+        - name: status
+          in: query
+          schema:
+            type: string
+            example: done
+          description: Filter by status
+        - name: external_id
+          in: query
+          schema:
+            type: string
+            example: ''
+          description: Filter by external_id
+        - name: after
+          in: query
+          schema:
+            type: string
+            example: >-
+              MTY4NTY5NDI3OC4wMDI0MTAgZTA4YmM4NTctMjQxNC00ZTY1LTk4MWUtMzE5MDQ4NTFhZmRk
+          description: After cursor (pagination)
+      responses:
+        '200':
+          description: ''
+        '500':
+          description: 'something went wrong'
+    post:
+      tags:
+        - Signature Requests
+      summary: 1. Initiate SR
+      description: 1. Initiate SR
+      operationId: 1InitiateSr
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                custom_experience_id:
+                  type: string
+                  example: '{{customExperienceId}}'
+                delivery_mode:
+                  type: string
+                  example: email
+                documents:
+                  type: array
+                  items:
+                    type: string
+                    example: '{{documentId}}'
+                  example:
+                    - '{{documentId}}'
+                email_custom_note:
+                  type: string
+                  example: Dear John, Please sign the following document.
+                expiration_date:
+                  type: string
+                  example: '{{expirationDate}}'
+                external_id:
+                  type: string
+                  example: external_id_{{$randomAlphaNumeric}}
+                name:
+                  type: string
+                  example: 'Signature Request {{$randomAdjective}} #{{$randomBsNoun}}'
+                ordered_signers:
+                  type: boolean
+                  example: false
+                reminder_settings:
+                  type: object
+                  properties:
+                    interval_in_days:
+                      type: number
+                      example: 1
+                    max_occurrences:
+                      type: number
+                      example: 4
+                signers:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      custom_text:
+                        type: object
+                        properties:
+                          reminder_body:
+                            type: string
+                            example: Dear John, Please sign the following document.
+                          reminder_subject:
+                            type: string
+                            example: Reminder, you did not sign your contract yet
+                          request_body:
+                            type: string
+                            example: Dear John, Please sign the following document.
+                          request_subject:
+                            type: string
+                            example: You are invited to sign your contract
+                      fields:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            document_id:
+                              type: string
+                              example: '{{documentId}}'
+                            page:
+                              type: number
+                              example: 1
+                            type:
+                              type: string
+                              example: signature
+                            width:
+                              type: number
+                              example: 180
+                            x:
+                              type: number
+                              example: 400
+                            'y':
+                              type: number
+                              example: 650
+                        example:
+                          - document_id: '{{documentId}}'
+                            page: 1
+                            type: signature
+                            width: 180
+                            x: 400
+                            'y': 650
+                      info:
+                        type: object
+                        properties:
+                          email:
+                            type: string
+                            example: signer-{{$randomExampleEmail}}
+                          first_name:
+                            type: string
+                            example: '{{$randomFirstName}}'
+                          last_name:
+                            type: string
+                            example: '{{$randomLastName}}'
+                          locale:
+                            type: string
+                            example: fr
+                          phone_number:
+                            type: string
+                            example: '+33600000000'
+                      signature_authentication_mode:
+                        type: string
+                        example: no_otp
+                      signature_level:
+                        type: string
+                        example: electronic_signature
+                  example:
+                    - custom_text:
+                        reminder_body: Dear John, Please sign the following document.
+                        reminder_subject: Reminder, you did not sign your contract yet
+                        request_body: Dear John, Please sign the following document.
+                        request_subject: You are invited to sign your contract
+                      fields:
+                        - document_id: '{{documentId}}'
+                          page: 1
+                          type: signature
+                          width: 180
+                          x: 400
+                          'y': 650
+                      info:
+                        email: signer-{{$randomExampleEmail}}
+                        first_name: '{{$randomFirstName}}'
+                        last_name: '{{$randomLastName}}'
+                        locale: fr
+                        phone_number: '+33600000000'
+                      signature_authentication_mode: no_otp
+                      signature_level: electronic_signature
+                template_id:
+                  nullable: true
+                  example: null
+                timezone:
+                  type: string
+                  example: Europe/Paris
+                workspace_id:
+                  type: string
+                  example: '{{workspaceId}}'
+            examples:
+              1. Initiate SR:
+                value:
+                  delivery_mode: none
+                  name: 'Signature Request {{$randomAdjective}} #{{$randomBsNoun}}'
+                  ordered_signers: false
+                  timezone: Europe/Paris
+              Initiate Signature Request (full example):
+                value:
+                  custom_experience_id: '{{customExperienceId}}'
+                  delivery_mode: email
+                  documents:
+                    - '{{documentId}}'
+                  email_custom_note: Dear John, Please sign the following document.
+                  expiration_date: '{{expirationDate}}'
+                  external_id: external_id_{{$randomAlphaNumeric}}
+                  name: 'Signature Request {{$randomAdjective}} #{{$randomBsNoun}}'
+                  ordered_signers: false
+                  reminder_settings:
+                    interval_in_days: 1
+                    max_occurrences: 4
+                  signers:
+                    - custom_text:
+                        reminder_body: Dear John, Please sign the following document.
+                        reminder_subject: Reminder, you did not sign your contract yet
+                        request_body: Dear John, Please sign the following document.
+                        request_subject: You are invited to sign your contract
+                      fields:
+                        - document_id: '{{documentId}}'
+                          page: 1
+                          type: signature
+                          width: 180
+                          x: 400
+                          'y': 650
+                      info:
+                        email: signer-{{$randomExampleEmail}}
+                        first_name: '{{$randomFirstName}}'
+                        last_name: '{{$randomLastName}}'
+                        locale: fr
+                        phone_number: '+33600000000'
+                      signature_authentication_mode: no_otp
+                      signature_level: electronic_signature
+                  template_id: null
+                  timezone: Europe/Paris
+                  workspace_id: '{{workspaceId}}'
+              Initiate Signature Request (minimal example):
+                value:
+                  delivery_mode: none
+                  name: 'Signature Request {{$randomAdjective}} #{{$randomBsNoun}}'
+      responses:
+        '200':
+          description: ''
+  /signature_requests/{signatureRequestId}/documents:
+    get:
+      tags:
+        - Documents
+      summary: List Documents from SR
+      description: List Documents from SR
+      operationId: listDocumentsFromSr
+      responses:
+        '200':
+          description: ''
+    post:
+      tags:
+        - Documents
+      summary: 2. Upload Document in SR
+      description: 2. Upload Document in SR
+      operationId: 2UploadDocumentInSr
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+                initials[alignment]:
+                  type: string
+                  example: right
+                initials[y]:
+                  type: string
+                  example: '700'
+                nature:
+                  type: string
+                  example: signable_document
+                parse_anchors:
+                  type: string
+                  example: 'true'
+                password:
+                  type: string
+                  example: '1234'
+      responses:
+        '200':
+          description: ''
+    parameters:
+      - name: signatureRequestId
+        in: path
+        required: true
+        schema:
+          type: string
+  /signature_requests/{signatureRequestId}/signers:
+    get:
+      tags:
+        - Signers
+      summary: List Signers from a SR
+      description: List Signers from a SR
+      operationId: listSignersFromASr
+      responses:
+        '200':
+          description: ''
+    post:
+      tags:
+        - Signers
+      summary: 3. Add Signer in SR
+      description: 3. Add Signer in SR
+      operationId: 3AddSignerInSr
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                contact_id:
+                  type: string
+                  example: '{{contactId}}'
+                fields:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      document_id:
+                        type: string
+                        example: '{{documentId}}'
+                      height:
+                        type: number
+                        example: 37
+                      page:
+                        type: number
+                        example: 1
+                      type:
+                        type: string
+                        example: signature
+                      width:
+                        type: number
+                        example: 85
+                      x:
+                        type: number
+                        example: 0
+                      'y':
+                        type: number
+                        example: 0
+                  example:
+                    - document_id: '{{documentId}}'
+                      height: 37
+                      page: 1
+                      type: signature
+                      width: 85
+                      x: 0
+                      'y': 0
+                signature_authentication_mode:
+                  type: string
+                  example: otp_sms
+                signature_level:
+                  type: string
+                  example: electronic_signature
+            examples:
+              3. Add Signer in SR:
+                value:
+                  fields:
+                    - document_id: '{{documentId}}'
+                      height: 37
+                      page: 1
+                      type: signature
+                      width: 180
+                      x: 400
+                      'y': 650
+                  info:
+                    email: signer-{{$randomExampleEmail}}
+                    first_name: '{{$randomFirstName}}'
+                    last_name: '{{$randomLastName}}'
+                    locale: fr
+                    phone_number: '+33600000000'
+                  signature_authentication_mode: no_otp
+                  signature_level: electronic_signature
+              Add a Contact as a new Signer:
+                value:
+                  contact_id: '{{contactId}}'
+                  fields:
+                    - document_id: '{{documentId}}'
+                      height: 37
+                      page: 1
+                      type: signature
+                      width: 85
+                      x: 0
+                      'y': 0
+                  signature_authentication_mode: otp_sms
+                  signature_level: electronic_signature
+              Add a User as a new Signer:
+                value:
+                  fields:
+                    - document_id: '{{documentId}}'
+                      height: 37
+                      page: 1
+                      type: signature
+                      width: 85
+                      x: 0
+                      'y': 0
+                  signature_authentication_mode: otp_sms
+                  signature_level: electronic_signature
+                  user_id: '{{userId}}'
+              Add a new Signer:
+                value:
+                  identification_attestation_id: '{{$randomUUID}}'
+                  info:
+                    email: signer-{{$randomExampleEmail}}
+                    first_name: '{{$randomFirstName}}'
+                    last_name: '{{$randomLastName}}'
+                    locale: fr
+                    phone_number: '+33600000000'
+                  signature_authentication_mode: otp_sms
+                  signature_level: advanced_electronic_signature
+      responses:
+        '200':
+          description: ''
+        '201':
+          description: >-
+            Add a new Signer from Info with a Signature field / Add a new Signer
+            from Info with a Text field / Add a new Signer from Info with a
+            Mention field / Add a new Signer from Info with a Checkbox field /
+            Add a new Signer from Info with a Radio Group field / Add a new
+            Signer from Info with all kinds of fields / Add a new Signer from
+            Info with no field
+          content: {}
+    parameters:
+      - name: signatureRequestId
+        in: path
+        required: true
+        schema:
+          type: string
+  /signature_requests/{signatureRequestId}/activate:
+    post:
+      tags:
+        - Signature Requests
+      summary: 4. Activate SR
+      description: 4. Activate SR
+      operationId: 4ActivateSr
+      responses:
+        '200':
+          description: ''
+    parameters:
+      - name: signatureRequestId
+        in: path
+        required: true
+        schema:
+          type: string
+  /signature_requests/{signatureRequestId}/approvers:
+    post:
+      tags:
+        - Approvers
+      summary: Add Approver
+      description: Add Approver
+      operationId: addApprover
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                info:
+                  type: object
+                  properties:
+                    email:
+                      type: string
+                      example: approver-{{$randomExampleEmail}}
+                    first_name:
+                      type: string
+                      example: '{{$randomFirstName}}'
+                    last_name:
+                      type: string
+                      example: '{{$randomLastName}}'
+                    locale:
+                      type: string
+                      example: fr
+                    phone_number:
+                      type: string
+                      example: '+33600000000'
+            examples:
+              Add Approver:
+                value:
+                  info:
+                    email: approver-{{$randomExampleEmail}}
+                    first_name: '{{$randomFirstName}}'
+                    last_name: '{{$randomLastName}}'
+                    locale: fr
+                    phone_number: '+33600000000'
+      responses:
+        '200':
+          description: ''
+    parameters:
+      - name: signatureRequestId
+        in: path
+        required: true
+        schema:
+          type: string
+  /signature_requests/{signatureRequestId}/approvers/{approverId}:
+    get:
+      tags:
+        - Approvers
+      summary: Get An Approver
+      description: Get An Approver
+      operationId: getAnApprover
+      requestBody:
+        content:
+          application/json:
+            examples:
+              Get An Approver:
+                value: ''
+      responses:
+        '200':
+          description: ''
+    delete:
+      tags:
+        - Approvers
+      summary: Delete Approver on SR
+      description: Delete Approver on SR
+      operationId: deleteApproverOnSr
+      responses:
+        '200':
+          description: ''
+    patch:
+      tags:
+        - Approvers
+      summary: Update an Approver
+      description: Update an Approver
+      operationId: updateAnApprover
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                info:
+                  type: object
+                  properties:
+                    email:
+                      type: string
+                      example: updated_approver-{{$randomExampleEmail}}
+                    first_name:
+                      type: string
+                      example: Updated {{$randomFirstName}}
+                    last_name:
+                      type: string
+                      example: Updated {{$randomLastName}}
+                    locale:
+                      type: string
+                      example: en
+                    phone_number:
+                      type: string
+                      example: '+33600000001'
+            examples:
+              Update an Approver:
+                value:
+                  info:
+                    email: updated_approver-{{$randomExampleEmail}}
+                    first_name: Updated {{$randomFirstName}}
+                    last_name: Updated {{$randomLastName}}
+                    locale: en
+                    phone_number: '+33600000001'
+      responses:
+        '200':
+          description: ''
+    parameters:
+      - name: signatureRequestId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: approverId
+        in: path
+        required: true
+        schema:
+          type: string
+  /consumptions/export:
+    get:
+      tags:
+        - Consumption
+      summary: Export consumption
+      description: Export consumption
+      operationId: exportConsumption
+      parameters:
+        - name: from
+          in: query
+          schema:
+            type: string
+            example: '2022-05-11'
+        - name: to
+          in: query
+          schema:
+            type: string
+            example: '2023-05-11'
+      responses:
+        '200':
+          description: ''
+  /consumptions:
+    get:
+      tags:
+        - Consumption
+      summary: Fetch consumption
+      description: Fetch consumption
+      operationId: fetchConsumption
+      parameters:
+        - name: from
+          in: query
+          schema:
+            type: string
+            example: '2022-05-12'
+        - name: to
+          in: query
+          schema:
+            type: string
+            example: '2023-05-12'
+      responses:
+        '200':
+          description: ''
+  /contacts:
+    get:
+      tags:
+        - Contacts
+      summary: List Contacts
+      description: List Contacts
+      operationId: listContacts
+      parameters:
+        - name: after
+          in: query
+          schema:
+            type: string
+            example: ''
+      responses:
+        '200':
+          description: ''
+    post:
+      tags:
+        - Contacts
+      summary: Create Contact
+      description: Create Contact
+      operationId: createContact
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                address_city:
+                  type: string
+                  example: '{{$randomCity}}'
+                address_country:
+                  type: string
+                  example: '{{$randomCountry}}'
+                address_line_1:
+                  type: string
+                  example: '{{$randomStreetAddress}}'
+                address_line_2:
+                  type: string
+                  example: '{{$randomNoun}}'
+                address_postal_code:
+                  type: string
+                  example: '75009'
+                company_name:
+                  type: string
+                  example: '{{$randomCompanyName}}'
+                email:
+                  type: string
+                  example: contact-{{$randomExampleEmail}}
+                first_name:
+                  type: string
+                  example: '{{$randomFirstName}}'
+                job_title:
+                  type: string
+                  example: '{{$randomJobTitle}}'
+                last_name:
+                  type: string
+                  example: '{{$randomLastName}}'
+                locale:
+                  type: string
+                  example: fr
+                phone_number:
+                  type: string
+                  example: '+33600000000'
+            examples:
+              Create Contact:
+                value:
+                  address_city: '{{$randomCity}}'
+                  address_country: '{{$randomCountry}}'
+                  address_line_1: '{{$randomStreetAddress}}'
+                  address_line_2: '{{$randomNoun}}'
+                  address_postal_code: '75009'
+                  company_name: '{{$randomCompanyName}}'
+                  email: contact-{{$randomExampleEmail}}
+                  first_name: '{{$randomFirstName}}'
+                  job_title: '{{$randomJobTitle}}'
+                  last_name: '{{$randomLastName}}'
+                  locale: fr
+                  phone_number: '+33600000000'
+      responses:
+        '200':
+          description: ''
+  /contacts/{contactId}:
+    get:
+      tags:
+        - Contacts
+      summary: Fetch Contact
+      description: Fetch Contact
+      operationId: fetchContact
+      responses:
+        '200':
+          description: ''
+    delete:
+      tags:
+        - Contacts
+      summary: Delete Contact
+      description: Delete Contact
+      operationId: deleteContact
+      responses:
+        '200':
+          description: ''
+    patch:
+      tags:
+        - Contacts
+      summary: Update Contact
+      description: Update Contact
+      operationId: updateContact
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                address_city:
+                  type: string
+                  example: updated-{{$randomCity}}
+                address_country:
+                  type: string
+                  example: updated-{{$randomCountry}}
+                address_line_1:
+                  type: string
+                  example: updated-{{$randomStreetAddress}}
+                address_line_2:
+                  type: string
+                  example: updated-{{$randomNoun}}
+                address_postal_code:
+                  type: string
+                  example: updated-75009
+                company_name:
+                  type: string
+                  example: updated-{{$randomCompanyName}}
+                email:
+                  type: string
+                  example: updated-contact-{{$randomExampleEmail}}
+                first_name:
+                  type: string
+                  example: updated-{{$randomFirstName}}
+                job_title:
+                  type: string
+                  example: updated-{{$randomJobTitle}}
+                last_name:
+                  type: string
+                  example: updated-{{$randomLastName}}
+                locale:
+                  type: string
+                  example: en
+                phone_number:
+                  type: string
+                  example: '+33600000001'
+                workspace_id:
+                  nullable: true
+                  example: null
+            examples:
+              Update Contact:
+                value:
+                  address_city: updated-{{$randomCity}}
+                  address_country: updated-{{$randomCountry}}
+                  address_line_1: updated-{{$randomStreetAddress}}
+                  address_line_2: updated-{{$randomNoun}}
+                  address_postal_code: updated-75009
+                  company_name: updated-{{$randomCompanyName}}
+                  email: updated-contact-{{$randomExampleEmail}}
+                  first_name: updated-{{$randomFirstName}}
+                  job_title: updated-{{$randomJobTitle}}
+                  last_name: updated-{{$randomLastName}}
+                  locale: en
+                  phone_number: '+33600000001'
+                  workspace_id: null
+      responses:
+        '200':
+          description: ''
+    parameters:
+      - name: contactId
+        in: path
+        required: true
+        schema:
+          type: string
+  /custom_experiences:
+    get:
+      tags:
+        - Custom Experiences
+      summary: List CX
+      description: List CX
+      operationId: listCx
+      responses:
+        '200':
+          description: ''
+    post:
+      tags:
+        - Custom Experiences
+      summary: Create  CX
+      description: Create  CX
+      operationId: createCx
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                background_color:
+                  type: string
+                  example: '{{$randomHexColor}}'
+                button_color:
+                  type: string
+                  example: '{{$randomHexColor}}'
+                disabled_notifications:
+                  type: array
+                  items:
+                    type: string
+                    example: approver.expiration_date_reminder
+                  example:
+                    - approver.expiration_date_reminder
+                    - approver.canceled
+                    - approver.expiration_date_updated
+                    - follower.approved
+                    - follower.canceled
+                    - follower.completed
+                    - follower.expired
+                    - follower.rejected
+                    - follower.signed
+                    - sender.approved
+                    - sender.canceled
+                    - sender.completed
+                    - sender.rejected
+                    - sender.signed
+                    - signer.expiration_date_reminder
+                    - signer.canceled
+                    - signer.completed
+                    - signer.signed
+                    - signer.expiration_date_updated
+                email_expiration_text_disabled:
+                  type: boolean
+                  example: true
+                email_footer_signature_disabled:
+                  type: boolean
+                  example: true
+                email_header_text_disabled:
+                  type: boolean
+                  example: false
+                email_logo_disabled:
+                  type: boolean
+                  example: true
+                landing_page_disabled:
+                  type: boolean
+                  example: true
+                name:
+                  type: string
+                  example: CX {{$randomBsBuzz}}
+                redirect_urls:
+                  type: object
+                  properties:
+                    decline:
+                      type: string
+                      example: https://www.example.com/decline
+                    error:
+                      type: string
+                      example: https://www.example.com/error
+                    success:
+                      type: string
+                      example: https://www.example.com/success
+                side_panel_disabled:
+                  type: boolean
+                  example: false
+                text_button_color:
+                  type: string
+                  example: '{{$randomHexColor}}'
+                text_color:
+                  type: string
+                  example: '{{$randomHexColor}}'
+            examples:
+              Create  CX:
+                value:
+                  background_color: '{{$randomHexColor}}'
+                  button_color: '{{$randomHexColor}}'
+                  disabled_notifications:
+                    - approver.expiration_date_reminder
+                    - approver.canceled
+                    - approver.expiration_date_updated
+                    - follower.approved
+                    - follower.canceled
+                    - follower.completed
+                    - follower.expired
+                    - follower.rejected
+                    - follower.signed
+                    - sender.approved
+                    - sender.canceled
+                    - sender.completed
+                    - sender.rejected
+                    - sender.signed
+                    - signer.expiration_date_reminder
+                    - signer.canceled
+                    - signer.completed
+                    - signer.signed
+                    - signer.expiration_date_updated
+                  email_expiration_text_disabled: true
+                  email_footer_signature_disabled: true
+                  email_header_text_disabled: false
+                  email_logo_disabled: true
+                  landing_page_disabled: true
+                  name: CX {{$randomBsBuzz}}
+                  redirect_urls:
+                    decline: https://www.example.com/decline
+                    error: https://www.example.com/error
+                    success: https://www.example.com/success
+                  side_panel_disabled: false
+                  text_button_color: '{{$randomHexColor}}'
+                  text_color: '{{$randomHexColor}}'
+      responses:
+        '200':
+          description: ''
+  /custom_experiences/{customExperienceId}/logo:
+    post:
+      tags:
+        - Custom Experiences
+      summary: Update CX Logo
+      description: Update CX Logo
+      operationId: updateCxLogo
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: ''
+    delete:
+      tags:
+        - Custom Experiences
+      summary: Delete CX logo
+      description: Delete CX logo
+      operationId: deleteCxLogo
+      responses:
+        '200':
+          description: ''
+    parameters:
+      - name: customExperienceId
+        in: path
+        required: true
+        schema:
+          type: string
+  /custom_experiences/{customExperienceId}:
+    get:
+      tags:
+        - Custom Experiences
+      summary: Fetch CX
+      description: Fetch CX
+      operationId: fetchCx
+      responses:
+        '200':
+          description: ''
+    delete:
+      tags:
+        - Custom Experiences
+      summary: Delete CX
+      description: Delete CX
+      operationId: deleteCx
+      responses:
+        '200':
+          description: ''
+    patch:
+      tags:
+        - Custom Experiences
+      summary: Update CX
+      description: Update CX
+      operationId: updateCx
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                background_color:
+                  type: string
+                  example: '{{$randomHexColor}}'
+                button_color:
+                  type: string
+                  example: '{{$randomHexColor}}'
+                disabled_notifications:
+                  type: array
+                  items:
+                    type: string
+                    example: signer.completed
+                  example:
+                    - signer.completed
+                    - signer.signed
+                    - signer.expiration_date_updated
+                email_expiration_text_disabled:
+                  type: boolean
+                  example: false
+                email_footer_signature_disabled:
+                  type: boolean
+                  example: false
+                email_header_text_disabled:
+                  type: boolean
+                  example: false
+                email_logo_disabled:
+                  type: boolean
+                  example: false
+                landing_page_disabled:
+                  type: boolean
+                  example: false
+                name:
+                  type: string
+                  example: Updated {{$randomBsBuzz}}
+                redirect_urls:
+                  type: object
+                  properties:
+                    decline:
+                      type: string
+                      example: https://www.example.com/decline
+                    error:
+                      type: string
+                      example: https://www.google.com/updated-error
+                    success:
+                      type: string
+                      example: https://www.google.com/updated-success
+                side_panel_disabled:
+                  type: boolean
+                  example: false
+                text_button_color:
+                  type: string
+                  example: '{{$randomHexColor}}'
+                text_color:
+                  type: string
+                  example: '{{$randomHexColor}}'
+            examples:
+              Update CX:
+                value:
+                  background_color: '{{$randomHexColor}}'
+                  button_color: '{{$randomHexColor}}'
+                  disabled_notifications:
+                    - signer.completed
+                    - signer.signed
+                    - signer.expiration_date_updated
+                  email_expiration_text_disabled: false
+                  email_footer_signature_disabled: false
+                  email_header_text_disabled: false
+                  email_logo_disabled: false
+                  landing_page_disabled: false
+                  name: Updated {{$randomBsBuzz}}
+                  redirect_urls:
+                    decline: https://www.example.com/decline
+                    error: https://www.google.com/updated-error
+                    success: https://www.google.com/updated-success
+                  side_panel_disabled: false
+                  text_button_color: '{{$randomHexColor}}'
+                  text_color: '{{$randomHexColor}}'
+      responses:
+        '200':
+          description: ''
+    parameters:
+      - name: customExperienceId
+        in: path
+        required: true
+        schema:
+          type: string
+  /documents:
+    post:
+      tags:
+        - Documents
+      summary: Upload Document
+      description: Upload Document
+      operationId: uploadDocument
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+                initials[alignment]:
+                  type: string
+                  example: right
+                initials[y]:
+                  type: string
+                  example: '700'
+                nature:
+                  type: string
+                  example: signable_document
+                parse_anchors:
+                  type: string
+                  example: 'true'
+                password:
+                  type: string
+                  example: '1234'
+      responses:
+        '200':
+          description: ''
+  /signature_requests/{signatureRequestId}/documents/{documentId}:
+    get:
+      tags:
+        - Documents
+      summary: Fetch Document from SR
+      description: Fetch Document from SR
+      operationId: fetchDocumentFromSr
+      responses:
+        '200':
+          description: ''
+    delete:
+      tags:
+        - Documents
+      summary: Delete Document from SR
+      description: Delete Document from SR
+      operationId: deleteDocumentFromSr
+      responses:
+        '200':
+          description: ''
+    patch:
+      tags:
+        - Documents
+      summary: Update Document
+      description: Update Document
+      operationId: updateDocument
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                password:
+                  type: string
+                  example: p@ssw0rd
+            examples:
+              Update Document:
+                value:
+                  password: p@ssw0rd
+      responses:
+        '200':
+          description: ''
+    parameters:
+      - name: signatureRequestId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: documentId
+        in: path
+        required: true
+        schema:
+          type: string
+  /signature_requests/{signatureRequestId}/documents/download:
+    get:
+      tags:
+        - Documents
+      summary: Download Documents from SR
+      description: Download Documents from SR
+      operationId: downloadDocumentsFromSr
+      parameters:
+        - name: version
+          in: query
+          schema:
+            type: string
+            example: current
+          description: current or completed
+      responses:
+        '200':
+          description: ''
+    parameters:
+      - name: signatureRequestId
+        in: path
+        required: true
+        schema:
+          type: string
+  /signature_requests/{signatureRequestId}/documents/{documentId}/download:
+    get:
+      tags:
+        - Documents
+      summary: Download A Document
+      description: Download A Document
+      operationId: downloadADocument
+      parameters:
+        - name: version
+          in: query
+          schema:
+            type: string
+            example: completed
+      responses:
+        '200':
+          description: ''
+    parameters:
+      - name: signatureRequestId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: documentId
+        in: path
+        required: true
+        schema:
+          type: string
+  /signature_requests/{signatureRequestId}/documents/{documentId}/replace:
+    post:
+      tags:
+        - Documents
+      summary: Replace Document
+      description: Replace Document
+      operationId: replaceDocument
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: ''
+    parameters:
+      - name: signatureRequestId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: documentId
+        in: path
+        required: true
+        schema:
+          type: string
+  /electronic_seal_images:
+    post:
+      tags:
+        - Electronic Seal
+      summary: Upload an Electronic Seal Image
+      description: Upload an Electronic Seal Image
+      operationId: uploadAnElectronicSealImage
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+                name:
+                  type: string
+                  example: seal image name
+      responses:
+        '200':
+          description: ''
+  /electronic_seal_documents:
+    post:
+      tags:
+        - Electronic Seal
+      summary: Upload an Electronic Seal Document
+      description: Upload an Electronic Seal Document
+      operationId: uploadAnElectronicSealDocument
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: ''
+  /electronic_seals:
+    post:
+      tags:
+        - Electronic Seal
+      summary: Create an Electronic Seal
+      description: Create an Electronic Seal
+      operationId: createAnElectronicSeal
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                document_id:
+                  type: string
+                  example: '{{electronicSealDocumentId}}'
+                fields:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      height:
+                        type: number
+                        example: 200
+                      page:
+                        type: number
+                        example: 1
+                      type:
+                        type: string
+                        example: seal
+                      width:
+                        type: number
+                        example: 250
+                      x:
+                        type: number
+                        example: 0
+                      'y':
+                        type: number
+                        example: 0
+                  example:
+                    - height: 200
+                      page: 1
+                      type: seal
+                      width: 250
+                      x: 0
+                      'y': 0
+                image_id:
+                  type: string
+                  example: '{{electronicSealImageId}}'
+                timestamp:
+                  type: boolean
+                  example: false
+            examples:
+              Create an Electronic Seal:
+                value:
+                  document_id: '{{electronicSealDocumentId}}'
+                  fields:
+                    - height: 200
+                      page: 1
+                      type: seal
+                      width: 250
+                      x: 0
+                      'y': 0
+                  image_id: '{{electronicSealImageId}}'
+                  timestamp: false
+      responses:
+        '200':
+          description: ''
+  /electronic_seals/{electronicSealId}:
+    get:
+      tags:
+        - Electronic Seal
+      summary: Get an Electronic Seal
+      description: Get an Electronic Seal
+      operationId: getAnElectronicSeal
+      responses:
+        '200':
+          description: ''
+    parameters:
+      - name: electronicSealId
+        in: path
+        required: true
+        schema:
+          type: string
+  /electronic_seals/{electronicSealId}/audit_trails:
+    get:
+      tags:
+        - Electronic Seal
+      summary: Get an Electronic Seal Audit Trail
+      description: Get an Electronic Seal Audit Trail
+      operationId: getAnElectronicSealAuditTrail
+      responses:
+        '200':
+          description: ''
+    parameters:
+      - name: electronicSealId
+        in: path
+        required: true
+        schema:
+          type: string
+  /electronic_seals/{electronicSealId}/audit_trails/download:
+    get:
+      tags:
+        - Electronic Seal
+      summary: Download an Electronic Seal Audit Trail
+      description: Download an Electronic Seal Audit Trail
+      operationId: downloadAnElectronicSealAuditTrail
+      responses:
+        '200':
+          description: ''
+    parameters:
+      - name: electronicSealId
+        in: path
+        required: true
+        schema:
+          type: string
+  /electronic_seal_documents/{electronicSealDocumentId}/download:
+    get:
+      tags:
+        - Electronic Seal
+      summary: Download an Electronic Seal Document
+      description: Download an Electronic Seal Document
+      operationId: downloadAnElectronicSealDocument
+      responses:
+        '200':
+          description: ''
+    parameters:
+      - name: electronicSealDocumentId
+        in: path
+        required: true
+        schema:
+          type: string
+  /signature_requests/{signatureRequestId}/documents/{documentId}/fields:
+    get:
+      tags:
+        - Fields
+      summary: List Fields from a SR Document
+      description: List Fields from a SR Document
+      operationId: listFieldsFromASrDocument
+      parameters:
+        - name: types[]
+          in: query
+          schema:
+            type: string
+            example: signature
+        - name: after
+          in: query
+          schema:
+            type: string
+            example: ''
+      responses:
+        '200':
+          description: ''
+    post:
+      tags:
+        - Fields
+      summary: Add a Field to a SR Document
+      description: Add a Field to a SR Document
+      operationId: addAFieldToASrDocument
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                height:
+                  type: number
+                  example: 24
+                page:
+                  type: number
+                  example: 1
+                text:
+                  type: string
+                  example: Value of this read only text field
+                type:
+                  type: string
+                  example: read_only_text
+                width:
+                  type: number
+                  example: 85
+                x:
+                  type: number
+                  example: 100
+                'y':
+                  type: number
+                  example: 300
+            examples:
+              Add a Field to a SR Document:
+                value:
+                  height: 24
+                  page: 1
+                  text: Value of this read only text field
+                  type: read_only_text
+                  width: 85
+                  x: 100
+                  'y': 300
+      responses:
+        '201':
+          description: >-
+            Signature Field / Mention Field / Checkbox Field / Text Field /
+            Radio Group Field / Read Only Text Field
+          content: {}
+    parameters:
+      - name: signatureRequestId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: documentId
+        in: path
+        required: true
+        schema:
+          type: string
+  /signature_requests/{signatureRequestId}/documents/{documentId}/fields/{fieldId}:
+    delete:
+      tags:
+        - Fields
+      summary: Delete a Field from a SR Document
+      description: Delete a Field from a SR Document
+      operationId: deleteAFieldFromASrDocument
+      responses:
+        '200':
+          description: ''
+    patch:
+      tags:
+        - Fields
+      summary: Update a Field from a SR Document
+      description: Update a Field from a SR Document
+      operationId: updateAFieldFromASrDocument
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                height:
+                  type: number
+                  example: 30
+                page:
+                  type: number
+                  example: 2
+                text:
+                  type: string
+                  example: Updated value of this read only text field
+                width:
+                  type: number
+                  example: 100
+                x:
+                  type: number
+                  example: 120
+                'y':
+                  type: number
+                  example: 320
+            examples:
+              Update a Field from a SR Document:
+                value:
+                  height: 30
+                  page: 2
+                  text: Updated value of this read only text field
+                  width: 100
+                  x: 120
+                  'y': 320
+      responses:
+        '200':
+          description: Signature Field
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  field:
+                    type: object
+                    properties:
+                      dimension:
+                        type: object
+                        properties:
+                          height:
+                            type: number
+                            example: 37
+                          width:
+                            type: number
+                            example: 85
+                          x:
+                            type: number
+                            example: 100
+                          'y':
+                            type: number
+                            example: 300
+                      document_id:
+                        type: string
+                        example: 7e69da0d-f3f1-4ba3-b663-79365c1631a7
+                      id:
+                        type: string
+                        example: 36252ef1-67ef-4be2-9403-61b9170a6372
+                      is_from_smart_anchor:
+                        type: boolean
+                        example: false
+                      locked:
+                        type: boolean
+                        example: false
+                      organization_id:
+                        type: string
+                        example: 29d98bf7-168c-4874-b8e9-9ba5e7382fa0
+                      page:
+                        type: number
+                        example: 1
+                      signature_request_id:
+                        type: string
+                        example: 0f9dd3fe-f11c-4931-9613-9beb099b25f7
+                      signer_id:
+                        type: string
+                        example: e1aa3b6a-59c7-44cc-be83-01574ae641cf
+                      stamped:
+                        type: boolean
+                        example: false
+                      valid:
+                        type: boolean
+                        example: true
+              examples:
+                Signature Field:
+                  value:
+                    field:
+                      dimension:
+                        height: 37
+                        width: 85
+                        x: 100
+                        'y': 300
+                      document_id: 7e69da0d-f3f1-4ba3-b663-79365c1631a7
+                      id: 36252ef1-67ef-4be2-9403-61b9170a6372
+                      is_from_smart_anchor: false
+                      locked: false
+                      organization_id: 29d98bf7-168c-4874-b8e9-9ba5e7382fa0
+                      page: 1
+                      signature_request_id: 0f9dd3fe-f11c-4931-9613-9beb099b25f7
+                      signer_id: e1aa3b6a-59c7-44cc-be83-01574ae641cf
+                      stamped: false
+                      valid: true
+    parameters:
+      - name: signatureRequestId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: documentId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: fieldId
+        in: path
+        required: true
+        schema:
+          type: string
+  /signature_requests/{signatureRequestId}/followers:
+    get:
+      tags:
+        - Followers
+      summary: List Followers
+      description: List Followers
+      operationId: listFollowers
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: object
+                properties:
+                  email:
+                    type: string
+                    example: follower1-{{$randomExampleEmail}}
+                  locale:
+                    type: string
+                    example: fr
+              example:
+                - email: follower1-{{$randomExampleEmail}}
+                  locale: fr
+                - email: follower2-{{$randomExampleEmail}}
+                  locale: en
+            examples:
+              List Followers:
+                value:
+                  - email: follower1-{{$randomExampleEmail}}
+                    locale: fr
+                  - email: follower2-{{$randomExampleEmail}}
+                    locale: en
+      responses:
+        '200':
+          description: ''
+    post:
+      tags:
+        - Followers
+      summary: Add Followers
+      description: Add Followers
+      operationId: addFollowers
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: object
+                properties:
+                  email:
+                    type: string
+                    example: follower1-{{$randomExampleEmail}}
+                  locale:
+                    type: string
+                    example: fr
+              example:
+                - email: follower1-{{$randomExampleEmail}}
+                  locale: fr
+                - email: follower2-{{$randomExampleEmail}}
+                  locale: en
+            examples:
+              Add Followers:
+                value:
+                  - email: follower1-{{$randomExampleEmail}}
+                    locale: fr
+                  - email: follower2-{{$randomExampleEmail}}
+                    locale: en
+      responses:
+        '200':
+          description: ''
+    parameters:
+      - name: signatureRequestId
+        in: path
+        required: true
+        schema:
+          type: string
+  /signature_requests/{signatureRequestId}:
+    get:
+      tags:
+        - Signature Requests
+      summary: Fetch Signature Request
+      description: Fetch Signature Request
+      operationId: fetchSignatureRequest
+      responses:
+        '200':
+          description: ''
+    delete:
+      tags:
+        - Signature Requests
+      summary: Delete Signature Request
+      description: Delete Signature Request
+      operationId: deleteSignatureRequest
+      responses:
+        '200':
+          description: ''
+    patch:
+      tags:
+        - Signature Requests
+      summary: Update Signature Request
+      description: Update Signature Request
+      operationId: updateSignatureRequest
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                branding_id:
+                  nullable: true
+                  example: null
+                custom_experience_id:
+                  type: string
+                  example: '{{customExperienceId}}'
+                delivery_mode:
+                  type: string
+                  example: email
+                email_custom_note:
+                  type: string
+                  example: Please sign these documents as soon as possible.
+                name:
+                  type: string
+                  example: Updated Signature Request
+                ordered_signers:
+                  type: boolean
+                  example: true
+                timezone:
+                  type: string
+                  example: Europe/Paris
+            examples:
+              Update Signature Request:
+                value:
+                  branding_id: null
+                  custom_experience_id: '{{customExperienceId}}'
+                  delivery_mode: email
+                  email_custom_note: Please sign these documents as soon as possible.
+                  name: Updated Signature Request
+                  ordered_signers: true
+                  timezone: Europe/Paris
+      responses:
+        '200':
+          description: ''
+    parameters:
+      - name: signatureRequestId
+        in: path
+        required: true
+        schema:
+          type: string
+  /signature_requests/{signatureRequestId}/cancel:
+    post:
+      tags:
+        - Signature Requests
+      summary: Cancel Signature Request
+      description: Cancel Signature Request
+      operationId: cancelSignatureRequest
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                reason:
+                  type: string
+                  example: other
+            examples:
+              Cancel Signature Request:
+                value:
+                  reason: other
+      responses:
+        '201':
+          description: Other
+          content: {}
+        '400':
+          description: Contractualization Aborted / Errors in Document
+          content: {}
+    parameters:
+      - name: signatureRequestId
+        in: path
+        required: true
+        schema:
+          type: string
+  /signature_requests/{signatureRequestId}/reactivate:
+    post:
+      tags:
+        - Signature Requests
+      summary: Reactivate Signature Request
+      description: Reactivate Signature Request
+      operationId: reactivateSignatureRequest
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                expiration_date:
+                  type: string
+                  example: '{{expirationDate}}'
+            examples:
+              Reactivate Signature Request:
+                value:
+                  expiration_date: '{{expirationDate}}'
+      responses:
+        '200':
+          description: ''
+    parameters:
+      - name: signatureRequestId
+        in: path
+        required: true
+        schema:
+          type: string
+  /signature_requests/{signatureRequestId}/signers/{signerId}/audit_trails/download:
+    get:
+      tags:
+        - Signers
+      summary: Download Audit Trails from Signer
+      description: Download Audit Trails from Signer
+      operationId: downloadAuditTrailsFromSigner
+      responses:
+        '200':
+          description: ''
+    parameters:
+      - name: signatureRequestId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: signerId
+        in: path
+        required: true
+        schema:
+          type: string
+  /signature_requests/{signatureRequestId}/audit_trails/download:
+    get:
+      tags:
+        - Signature Requests
+      summary: Download all Audit Trails from Signature Request
+      description: Download all Audit Trails from Signature Request
+      operationId: downloadAllAuditTrailsFromSignatureRequest
+      responses:
+        '200':
+          description: ''
+    parameters:
+      - name: signatureRequestId
+        in: path
+        required: true
+        schema:
+          type: string
+  /signature_requests/{signatureRequestId}/signers/{signerId}/send_otp:
+    post:
+      tags:
+        - Signers
+      summary: Send an OTP
+      description: Send an OTP
+      operationId: sendAnOtp
+      requestBody:
+        content:
+          application/json:
+            examples:
+              Send an OTP:
+                value: ''
+      responses:
+        '200':
+          description: ''
+    parameters:
+      - name: signatureRequestId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: signerId
+        in: path
+        required: true
+        schema:
+          type: string
+  /signature_requests/{signatureRequestId}/signers/{signerId}/sign:
+    post:
+      tags:
+        - Signers
+      summary: Sign
+      description: Sign
+      operationId: sign
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                consent_given_at:
+                  type: string
+                  example: '2024-04-19T22:10:00+00:00'
+                ip_address:
+                  type: string
+                  example: 192.0.2.146
+                otp:
+                  type: string
+                  example: '123456'
+            examples:
+              Sign:
+                value:
+                  consent_given_at: '2024-04-19T22:10:00+00:00'
+                  ip_address: 192.0.2.146
+                  otp: '123456'
+      responses:
+        '200':
+          description: ''
+    parameters:
+      - name: signatureRequestId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: signerId
+        in: path
+        required: true
+        schema:
+          type: string
+  /signature_requests/{signatureRequestId}/signers/{signerId}:
+    get:
+      tags:
+        - Signers
+      summary: Fetch a Signer from a SR
+      description: Fetch a Signer from a SR
+      operationId: fetchASignerFromASr
+      responses:
+        '200':
+          description: ''
+    delete:
+      tags:
+        - Signers
+      summary: Delete a Signer from SR
+      description: Delete a Signer from SR
+      operationId: deleteASignerFromSr
+      responses:
+        '200':
+          description: ''
+    patch:
+      tags:
+        - Signers
+      summary: Update a Signer
+      description: Update a Signer
+      operationId: updateASigner
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                identification_attestation_id:
+                  type: string
+                  example: '{{$randomUUID}}'
+            examples:
+              Update a Signer:
+                value:
+                  identification_attestation_id: '{{$randomUUID}}'
+      responses:
+        '200':
+          description: ''
+    parameters:
+      - name: signatureRequestId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: signerId
+        in: path
+        required: true
+        schema:
+          type: string
+  /signature_requests/{signatureRequestId}/signers/{signerId}/send_reminder:
+    post:
+      tags:
+        - Signers
+      summary: Send a reminder to a Signer
+      description: Send a reminder to a Signer
+      operationId: sendAReminderToASigner
+      requestBody:
+        content:
+          application/json:
+            examples:
+              Send a reminder to a Signer:
+                value: ''
+      responses:
+        '200':
+          description: ''
+    parameters:
+      - name: signatureRequestId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: signerId
+        in: path
+        required: true
+        schema:
+          type: string
+  /signature_requests/{signatureRequestId}/signers/{signerId}/audit_trails:
+    get:
+      tags:
+        - Signers
+      summary: Fetch Audit Trail JSON for a Signer
+      description: Fetch Audit Trail JSON for a Signer
+      operationId: fetchAuditTrailJsonForASigner
+      responses:
+        '200':
+          description: ''
+    parameters:
+      - name: signatureRequestId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: signerId
+        in: path
+        required: true
+        schema:
+          type: string
+  /signature_requests/{signatureRequestId}/signers/{signerId}/documents:
+    get:
+      tags:
+        - Signer Document Request
+      summary: List the Signer Documents of a Signer
+      description: List the Signer Documents of a Signer
+      operationId: listTheSignerDocumentsOfASigner
+      responses:
+        '200':
+          description: ''
+    delete:
+      tags:
+        - Signer Document Request
+      summary: Delete the Documents uploaded by a Signer
+      description: Delete the Documents uploaded by a Signer
+      operationId: deleteTheDocumentsUploadedByASigner
+      responses:
+        '200':
+          description: ''
+    parameters:
+      - name: signatureRequestId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: signerId
+        in: path
+        required: true
+        schema:
+          type: string
+  /signature_requests/{signatureRequestId}/document_requests:
+    post:
+      tags:
+        - Signer Document Request
+      summary: Add Signer Document Request
+      description: Add Signer Document Request
+      operationId: addSignerDocumentRequest
+      requestBody:
+        content:
+          application/json:
+            examples:
+              Add Signer Document Request:
+                value: |-
+                  {
+                      "title": "{{$randomBsNoun}}",
+                      "optional": {{$randomBoolean}},
+                      "signer_ids": [
+                          "{{signerId}}"
+                      ]
+                  }
+      responses:
+        '200':
+          description: ''
+    parameters:
+      - name: signatureRequestId
+        in: path
+        required: true
+        schema:
+          type: string
+  /signature_requests/{signatureRequestId}/signers/{signerId}/documents/{signerDocumentId}/download:
+    get:
+      tags:
+        - Signer Document Request
+      summary: Download Signer Documents of a Signer
+      description: Download Signer Documents of a Signer
+      operationId: downloadSignerDocumentsOfASigner
+      responses:
+        '200':
+          description: ''
+    parameters:
+      - name: signatureRequestId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: signerId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: signerDocumentId
+        in: path
+        required: true
+        schema:
+          type: string
+  /users:
+    get:
+      tags:
+        - Users
+      summary: List Users
+      description: List Users
+      operationId: listUsers
+      responses:
+        '200':
+          description: ''
+  /webhooks:
+    get:
+      tags:
+        - Webhooks
+      summary: List Webhook Subscription
+      description: List Webhook Subscription
+      operationId: listWebhookSubscription
+      responses:
+        '200':
+          description: ''
+    post:
+      tags:
+        - Webhooks
+      summary: Configure a new Webhook Subscription
+      description: Configure a new Webhook Subscription
+      operationId: configureANewWebhookSubscription
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                auto_retry:
+                  type: boolean
+                  example: true
+                description:
+                  type: string
+                  example: description
+                enabled:
+                  type: boolean
+                  example: true
+                endpoint:
+                  type: string
+                  example: https://webhook.site/1b9ddbad-a94e-46c5-9d1d-b142ebc5ed82
+                sandbox:
+                  type: boolean
+                  example: false
+                scopes:
+                  type: array
+                  items:
+                    type: string
+                    example: '*'
+                  example:
+                    - '*'
+                secret_key:
+                  nullable: true
+                  example: null
+                subscribed_events:
+                  type: array
+                  items:
+                    type: string
+                    example: '*'
+                  example:
+                    - '*'
+            examples:
+              Configure a new Webhook Subscription:
+                value:
+                  auto_retry: true
+                  description: description
+                  enabled: true
+                  endpoint: https://webhook.site/1b9ddbad-a94e-46c5-9d1d-b142ebc5ed82
+                  sandbox: false
+                  scopes:
+                    - '*'
+                  secret_key: null
+                  subscribed_events:
+                    - '*'
+      responses:
+        '200':
+          description: ''
+  /webhooks/{webhookId}:
+    get:
+      tags:
+        - Webhooks
+      summary: Fetch a Webhook Subscription
+      description: Fetch a Webhook Subscription
+      operationId: fetchAWebhookSubscription
+      responses:
+        '200':
+          description: ''
+    delete:
+      tags:
+        - Webhooks
+      summary: Delete a Webhook Subscription
+      description: Delete a Webhook Subscription
+      operationId: deleteAWebhookSubscription
+      requestBody:
+        content:
+          application/json:
+            examples:
+              Delete a Webhook Subscription:
+                value: ''
+      responses:
+        '200':
+          description: ''
+    patch:
+      tags:
+        - Webhooks
+      summary: Update a Webhook Subscription
+      description: Update a Webhook Subscription
+      operationId: updateAWebhookSubscription
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                enabled:
+                  type: boolean
+                  example: true
+            examples:
+              Update a Webhook Subscription:
+                value:
+                  enabled: true
+      responses:
+        '200':
+          description: ''
+    parameters:
+      - name: webhookId
+        in: path
+        required: true
+        schema:
+          type: string
+  /workspaces:
+    get:
+      tags:
+        - Workspaces
+      summary: List Workspaces
+      description: List Workspaces
+      operationId: listWorkspaces
+      parameters:
+        - name: after
+          in: query
+          schema:
+            type: string
+            example: ''
+      responses:
+        '200':
+          description: ''
+    post:
+      tags:
+        - Workspaces
+      summary: Create a Workspace
+      description: Create a Workspace
+      operationId: createAWorkspace
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                external_name:
+                  type: string
+                  example: New Workspace
+                name:
+                  type: string
+                  example: new workspace
+            examples:
+              Create a Workspace:
+                value:
+                  external_name: New Workspace
+                  name: new workspace
+      responses:
+        '200':
+          description: ''
+  /workspaces/{workspaceId}:
+    get:
+      tags:
+        - Workspaces
+      summary: Get Workspace
+      description: Get Workspace
+      operationId: getWorkspace
+      responses:
+        '200':
+          description: ''
+    delete:
+      tags:
+        - Workspaces
+      summary: Delete a Workspace
+      description: Delete a Workspace
+      operationId: deleteAWorkspace
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                workspaceId:
+                  type: string
+                  example: '{{targetWorkspaceId}}'
+            examples:
+              Delete a Workspace:
+                value:
+                  workspaceId: '{{targetWorkspaceId}}'
+      responses:
+        '200':
+          description: ''
+    patch:
+      tags:
+        - Workspaces
+      summary: Update a Workspace
+      description: Update a Workspace
+      operationId: updateAWorkspace
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                external_name:
+                  type: string
+                  example: New Workspace Name
+                name:
+                  type: string
+                  example: new workspace name
+            examples:
+              Update a Workspace:
+                value:
+                  external_name: New Workspace Name
+                  name: new workspace name
+      responses:
+        '200':
+          description: ''
+    parameters:
+      - name: workspaceId
+        in: path
+        required: true
+        schema:
+          type: string
+  /workspaces/default:
+    get:
+      tags:
+        - Workspaces
+      summary: Get default workspace
+      description: Get default workspace
+      operationId: getDefaultWorkspace
+      responses:
+        '200':
+          description: ''
+    post:
+      tags:
+        - Workspaces
+      summary: Mark workspace as default
+      description: Mark workspace as default
+      operationId: markWorkspaceAsDefault
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                workspaceId:
+                  type: string
+                  example: '{{workspaceId}}'
+            examples:
+              Mark workspace as default:
+                value:
+                  workspaceId: '{{workspaceId}}'
+      responses:
+        '200':
+          description: ''
+  /signature_requests/{signatureRequestId}/metadata:
+    get:
+      tags:
+        - Metadata
+      summary: Fetch Signature Request Metadata
+      description: Fetch Signature Request Metadata
+      operationId: fetchSignatureRequestMetadata
+      responses:
+        '200':
+          description: ''
+    put:
+      tags:
+        - Metadata
+      summary: Update Metadata of Signature Request
+      description: Update Metadata of Signature Request
+      operationId: updateMetadataOfSignatureRequest
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                data:
+                  type: object
+                  properties:
+                    key:
+                      type: string
+                      example: value
+            examples:
+              Update Metadata of Signature Request:
+                value:
+                  data:
+                    key: value
+      responses:
+        '200':
+          description: ''
+    post:
+      tags:
+        - Metadata
+      summary: Add Metadata for Signature Request
+      description: Add Metadata for Signature Request
+      operationId: addMetadataForSignatureRequest
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                data:
+                  type: object
+                  properties:
+                    key:
+                      type: string
+                      example: value
+            examples:
+              Add Metadata for Signature Request:
+                value:
+                  data:
+                    key: value
+      responses:
+        '200':
+          description: ''
+    delete:
+      tags:
+        - Metadata
+      summary: Delete Metadata of Signature Request
+      description: Delete Metadata of Signature Request
+      operationId: deleteMetadataOfSignatureRequest
+      responses:
+        '200':
+          description: ''
+    parameters:
+      - name: signatureRequestId
+        in: path
+        required: true
+        schema:
+          type: string
+  /templates:
+    get:
+      tags:
+        - Templates
+      summary: List Templates
+      description: List Templates
+      operationId: listTemplates
+      parameters:
+        - name: after
+          in: query
+          schema:
+            type: string
+            example: ''
+      responses:
+        '200':
+          description: ''
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+security:
+  - bearerAuth: []
+tags:
+  - name: Quickstart
+  - name: Approvers
+  - name: Consumption
+  - name: Contacts
+  - name: Custom Experiences
+  - name: Documents
+  - name: Electronic Seal
+  - name: Fields
+  - name: Followers
+  - name: Signature Requests
+  - name: Signers
+  - name: Signer Document Request
+  - name: Users
+  - name: Webhooks
+  - name: Workspaces
+  - name: Metadata
+  - name: Templates
